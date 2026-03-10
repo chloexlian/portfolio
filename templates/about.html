@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <p class="section-label">About Me</p>
+    <h1 class="page-title">Chloe Lian McIntosh</h1>
+    <p class="page-subtitle">Cybersecurity Student · Web Developer · Security Educator</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-layout">
+
+    <div class="about-main">
+      <h2>Background</h2>
+      <p>I'm a third-year Computer Science student at Oregon State University, concentrating in cybersecurity and expected to graduate in June 2027. My academic path has been shaped by a genuine fascination with how systems break — and how to build them so they don't.</p>
+
+      <p>Beyond the technical side, I'm drawn to a question most security professionals don't ask: <em>how do you get non-technical people to actually care about security?</em> That interest sits at the intersection of cybersecurity, web development, and communications — and it's what makes me a different kind of candidate.</p>
+
+      <h2>What I'm Working On</h2>
+      <p>My flagship project is this portfolio itself — a Flask application secured with AES-256 encryption and session-based user authentication. I use it as both a practical implementation of secure coding principles and a platform for publishing cybersecurity education content aimed at general audiences.</p>
+
+      <p>I'm also pursuing the <strong>ISC2 Certified in Cybersecurity (CC)</strong> and <strong>Google Cybersecurity Certificate</strong> to complement my academic training with industry-recognized credentials, and I actively participate in CTF (Capture the Flag) competitions to sharpen real-world offensive and defensive skills.</p>
+
+      <h2>Professional Experience</h2>
+      <p>While my internship experience is still ahead of me, my work history has sharpened skills that translate directly to security roles: data analysis, procedural compliance, accuracy under pressure, and the ability to identify and resolve discrepancies — all applied in high-volume, real-money environments.</p>
+
+      <h2>Eligibility</h2>
+      <p>I am a U.S. citizen, eligible for federal employment, and experienced in handling sensitive and confidential information with discretion.</p>
+    </div>
+
+    <aside class="about-sidebar">
+      <div class="sidebar-card">
+        <h3>Education</h3>
+        <p><strong>Oregon State University</strong><br>B.S. Computer Science<br>Concentration: Cybersecurity<br>Expected: June 2027</p>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Technical Skills</h3>
+        <ul class="skill-list">
+          <li>Python · C++ · JavaScript</li>
+          <li>SQL · R · HTML/CSS</li>
+          <li>Flask · Linux</li>
+          <li>Wireshark · Nmap</li>
+          <li>Metasploit · Burp Suite</li>
+          <li>AES Encryption</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Interests</h3>
+        <ul class="skill-list">
+          <li>Security Education</li>
+          <li>Web Development</li>
+          <li>Digital Marketing</li>
+          <li>CTF Competitions</li>
+          <li>Ethical Hacking</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Languages</h3>
+        <ul class="skill-list">
+          <li>English (Native)</li>
+          <li>Mandarin Chinese (Conversational)</li>
+        </ul>
+      </div>
+
+      <a href="{{ url_for('resume') }}" class="btn btn-primary" style="width:100%;text-align:center;margin-top:0.5rem;">Download CV</a>
+      <a href="{{ url_for('contact') }}" class="btn btn-outline" style="width:100%;text-align:center;margin-top:0.75rem;">Contact Me</a>
+    </aside>
+
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Cybersecurity Student · Oregon State University</p>
+      <h1 class="hero-headline">Hi, I'm Chloe<span class="accent">.</span></h1>
+      <p class="hero-sub">I build secure web applications, research vulnerabilities, and write about making cybersecurity understandable for everyone.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('about') }}" class="btn btn-primary">About Me</a>
+        <a href="{{ url_for('blog') }}" class="btn btn-ghost">Read the Blog</a>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="badge-ring">
+        <div class="badge-inner">
+          <span class="badge-icon">🔐</span>
+          <span class="badge-label">Cybersecurity<br>& Web Dev</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS STRIP -->
+<section class="skills-strip">
+  <div class="container">
+    <div class="skills-grid">
+      <div class="skill-chip"><span class="chip-icon">🐍</span> Python</div>
+      <div class="skill-chip"><span class="chip-icon">🌐</span> Flask</div>
+      <div class="skill-chip"><span class="chip-icon">🔒</span> AES Encryption</div>
+      <div class="skill-chip"><span class="chip-icon">📡</span> Wireshark / Nmap</div>
+      <div class="skill-chip"><span class="chip-icon">💻</span> Linux</div>
+      <div class="skill-chip"><span class="chip-icon">🧩</span> Digital Forensics</div>
+      <div class="skill-chip"><span class="chip-icon">📝</span> Security Education</div>
+      <div class="skill-chip"><span class="chip-icon">🖥️</span> Web Development</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT SNAPSHOT -->
+<section class="section">
+  <div class="container two-col">
+    <div class="col-text">
+      <p class="section-label">Who I Am</p>
+      <h2 class="section-heading">Cybersecurity student with a passion for education and the web.</h2>
+      <p>I'm a third-year Computer Science student at Oregon State University concentrating in cybersecurity. I'm interested in secure software development, network defense, and — unusually for a security student — making security <em>accessible</em> to non-technical audiences.</p>
+      <p>My background spans technical research, web development, and customer-facing work that's sharpened my ability to communicate complex ideas clearly.</p>
+      <a href="{{ url_for('about') }}" class="btn btn-outline">Full Bio →</a>
+    </div>
+    <div class="col-stats">
+      <div class="stat-card">
+        <span class="stat-num">3+</span>
+        <span class="stat-label">Years building a live security portfolio</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">6</span>
+        <span class="stat-label">Cybersecurity courses completed</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Transaction accuracy across 1,000s of records</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST POSTS -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-header-row">
+      <div>
+        <p class="section-label">From the Blog</p>
+        <h2 class="section-heading">Latest Writing</h2>
+      </div>
+      <a href="{{ url_for('blog') }}" class="btn btn-outline">All Posts →</a>
+    </div>
+    <div class="posts-grid">
+      {% for post in posts %}
+      <a href="{{ url_for('post', post_id=post.id) }}" class="post-card">
+        <span class="post-category">{{ post.category }}</span>
+        <h3 class="post-title">{{ post.title }}</h3>
+        <p class="post-summary">{{ post.summary }}</p>
+        <span class="post-date">{{ post.date }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="container cta-inner">
+    <h2>Interested in working together?</h2>
+    <p>I'm actively seeking cybersecurity internships for 2025–2026. I'd love to connect.</p>
+    <div class="cta-actions">
+      <a href="{{ url_for('contact') }}" class="btn btn-primary">Get In Touch</a>
+      <a href="{{ url_for('resume') }}" class="btn btn-ghost">Download CV</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

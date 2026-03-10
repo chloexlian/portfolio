@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Blog{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <p class="section-label">Writing</p>
+    <h1 class="page-title">Cybersecurity Blog</h1>
+    <p class="page-subtitle">Breaking down security concepts for developers, students, and curious non-technical readers.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Category filter -->
+    <div class="filter-row">
+      <a href="{{ url_for('blog') }}" class="filter-chip {% if not active %}filter-chip--active{% endif %}">All</a>
+      {% for cat in categories %}
+      <a href="{{ url_for('blog', category=cat) }}" class="filter-chip {% if active == cat %}filter-chip--active{% endif %}">{{ cat }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="posts-list">
+      {% for post in posts %}
+      <a href="{{ url_for('post', post_id=post.id) }}" class="post-row">
+        <div class="post-row-meta">
+          <span class="post-category">{{ post.category }}</span>
+          <span class="post-date">{{ post.date }}</span>
+        </div>
+        <h2 class="post-row-title">{{ post.title }}</h2>
+        <p class="post-row-summary">{{ post.summary }}</p>
+        <span class="post-read-more">Read more →</span>
+      </a>
+      {% else %}
+      <p>No posts in this category yet.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
