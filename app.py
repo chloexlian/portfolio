@@ -2,7 +2,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='/static')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.secret_key = "change-this-in-production"
 
 # ── Blog posts (replace with a database later) ──────────────────────────────
