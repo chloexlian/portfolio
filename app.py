@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 import os
 
@@ -119,5 +120,5 @@ def resume():
     flash("Resume file not found. Please add resume.pdf to the static folder.", "error")
     return redirect(url_for("index"))
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if _name__ == "__main__":
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
