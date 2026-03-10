@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.secret_key = "change-this-in-production"
+app.secret_key = os.environ.get('SECRET_KEY', 'change-this-in-production')
 
 # ── Blog posts (replace with a database later) ──────────────────────────────
 POSTS = [
@@ -121,5 +121,5 @@ def resume():
     flash("Resume file not found. Please add resume.pdf to the static folder.", "error")
     return redirect(url_for("index"))
 
-if _name__ == "__main__":
+if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
