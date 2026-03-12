@@ -10,7 +10,7 @@
   --text-mid:   #6B5744;
   --text-light: #9C8070;
   --nav-bg:     #F5EFE6;
-  --pink:       #E8B4BC;
+  --pink:       #FFE8F4;
   --white:      #FFFFFF;
   --border:     #E0D5C8;
   --serif: 'Cormorant Garamond', Georgia, serif;
@@ -161,7 +161,7 @@ h1,h2,h3{font-family:var(--serif);line-height:1.15;font-weight:400;}
 .fun-fact-text{font-size:0.82rem;color:var(--text-mid);line-height:1.5;}
 
 /* CTA — baby pink */
-.cta-section{background:var(--pink);text-align:center;}
+.cta-section{background:#FFE8F4;text-align:center;}
 .cta-inner h2{font-family:var(--serif);font-size:2.5rem;font-weight:300;font-style:italic;margin-bottom:0.75rem;color:var(--bark);}
 .cta-inner p{color:rgba(44,31,20,0.7);margin-bottom:2rem;font-size:1.05rem;}
 .cta-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
