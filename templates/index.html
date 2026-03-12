@@ -2,81 +2,79 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<!-- HERO -->
 <section class="hero">
   <div class="container hero-inner">
     <div class="hero-text">
       <p class="hero-eyebrow">Cybersecurity Student · Oregon State University</p>
-      <h1 class="hero-headline">Hi, I'm Chloe<span class="accent">.</span></h1>
-      <p class="hero-sub">I build secure web applications, research vulnerabilities, and write about making cybersecurity understandable for everyone.</p>
+      <h1 class="hero-headline">Hi, I'm Chloe.</h1>
+      <p class="hero-sub">Born in Arizona, raised across China and Vietnam, and now building things I hope make the internet a little safer. I got into cybersecurity because I've watched real people — of all ages — get scammed, and I think that's a solvable problem.</p>
       <div class="hero-actions">
-        <a href="{{ url_for('about') }}" class="btn btn-primary">About Me</a>
-        <a href="{{ url_for('blog') }}" class="btn btn-ghost">Read the Blog</a>
+        <a href="{{ url_for('about') }}" class="btn btn-primary">Get to know me</a>
+        <a href="{{ url_for('blog') }}" class="btn btn-ghost-dark">Read the blog</a>
       </div>
     </div>
-    <div class="hero-badge">
-      <div class="badge-ring">
-        <div class="badge-inner">
-          <span class="badge-icon">🔐</span>
-          <span class="badge-label">Cybersecurity<br>& Web Dev</span>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-frame">
+        <!-- To add your photo: save it as static/img/photo.jpg then replace the div below with:
+             <img src="{{ url_for('static', filename='img/photo.jpg') }}" alt="Chloe McIntosh"> -->
+        <div class="hero-photo-placeholder">
+          <span style="font-size:3rem">🌿</span>
+          <p style="margin:0;font-size:0.9rem;color:#C4B5A0;">Add your photo to static/img/photo.jpg</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SKILLS STRIP -->
-<section class="skills-strip">
+<div class="skills-strip">
   <div class="container">
     <div class="skills-grid">
-      <div class="skill-chip"><span class="chip-icon">🐍</span> Python</div>
-      <div class="skill-chip"><span class="chip-icon">🌐</span> Flask</div>
-      <div class="skill-chip"><span class="chip-icon">🔒</span> AES Encryption</div>
-      <div class="skill-chip"><span class="chip-icon">📡</span> Wireshark / Nmap</div>
-      <div class="skill-chip"><span class="chip-icon">💻</span> Linux</div>
-      <div class="skill-chip"><span class="chip-icon">🧩</span> Digital Forensics</div>
-      <div class="skill-chip"><span class="chip-icon">📝</span> Security Education</div>
-      <div class="skill-chip"><span class="chip-icon">🖥️</span> Web Development</div>
+      <div class="skill-chip">🐍 Python</div>
+      <div class="skill-chip">🌐 Flask</div>
+      <div class="skill-chip">🔒 AES Encryption</div>
+      <div class="skill-chip">📡 Wireshark · Nmap</div>
+      <div class="skill-chip">💻 Linux</div>
+      <div class="skill-chip">🧩 Digital Forensics</div>
+      <div class="skill-chip">📝 Security Education</div>
+      <div class="skill-chip">🖥️ Web Development</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ABOUT SNAPSHOT -->
 <section class="section">
   <div class="container two-col">
     <div class="col-text">
-      <p class="section-label">Who I Am</p>
-      <h2 class="section-heading">Cybersecurity student with a passion for education and the web.</h2>
-      <p>I'm a third-year Computer Science student at Oregon State University concentrating in cybersecurity. I'm interested in secure software development, network defense, and — unusually for a security student — making security <em>accessible</em> to non-technical audiences.</p>
-      <p>My background spans technical research, web development, and customer-facing work that's sharpened my ability to communicate complex ideas clearly.</p>
-      <a href="{{ url_for('about') }}" class="btn btn-outline">Full Bio →</a>
+      <span class="section-label">Who I Am</span>
+      <h2 class="section-heading">Grew up across three countries. Ended up in cybersecurity.</h2>
+      <p>I moved schools 12 times growing up — Arizona, China, Vietnam, San Francisco — which means I'm very good at reading new environments quickly and making myself useful fast.</p>
+      <p>My path into CS started with modding Minecraft and GTA, which evolved into understanding systems well enough to break them. At some point I got <em style="color:#B07355">banned from GitHub</em> and had to appeal — and that moment made me realise: if a kid could figure this out, someone with a degree and bad intentions could do so much more damage.</p>
+      <a href="{{ url_for('about') }}" class="btn btn-outline" style="margin-top:0.5rem;display:inline-block;">Full story →</a>
     </div>
     <div class="col-stats">
+      <div class="stat-card">
+        <span class="stat-num">12</span>
+        <span class="stat-label">Schools attended across 3 countries</span>
+      </div>
       <div class="stat-card">
         <span class="stat-num">3+</span>
         <span class="stat-label">Years building a live security portfolio</span>
       </div>
       <div class="stat-card">
-        <span class="stat-num">6</span>
-        <span class="stat-label">Cybersecurity courses completed</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-num">100%</span>
-        <span class="stat-label">Transaction accuracy across 1,000s of records</span>
+        <span class="stat-num">0</span>
+        <span class="stat-label">Tolerance for ugly, unusable websites</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- LATEST POSTS -->
 <section class="section section--alt">
   <div class="container">
     <div class="section-header-row">
       <div>
-        <p class="section-label">From the Blog</p>
-        <h2 class="section-heading">Latest Writing</h2>
+        <span class="section-label">From the Blog</span>
+        <h2 class="section-heading">Things I've been thinking about.</h2>
       </div>
-      <a href="{{ url_for('blog') }}" class="btn btn-outline">All Posts →</a>
+      <a href="{{ url_for('blog') }}" class="btn btn-outline">All posts →</a>
     </div>
     <div class="posts-grid">
       {% for post in posts %}
@@ -91,14 +89,13 @@
   </div>
 </section>
 
-<!-- CTA -->
 <section class="section cta-section">
   <div class="container cta-inner">
-    <h2>Interested in working together?</h2>
-    <p>I'm actively seeking cybersecurity internships for 2025–2026. I'd love to connect.</p>
+    <h2>Let's work together.</h2>
+    <p>Actively looking for cybersecurity internships for 2025–2026. If something here resonated, I'd love to chat.</p>
     <div class="cta-actions">
-      <a href="{{ url_for('contact') }}" class="btn btn-primary">Get In Touch</a>
-      <a href="{{ url_for('resume') }}" class="btn btn-ghost">Download CV</a>
+      <a href="{{ url_for('contact') }}" class="btn btn-pink-outline">Get in touch</a>
+      <a href="{{ url_for('resume') }}" class="btn btn-pink-outline">Download CV</a>
     </div>
   </div>
 </section>

@@ -1,10 +1,8 @@
-
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 import os
 
-app = Flask(__name__, static_folder='static', static_url_path='/static')
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-app.secret_key = os.environ.get('SECRET_KEY', 'change-this-in-production')
+app = Flask(__name__)
+app.secret_key = "change-this-in-production"
 
 # ── Blog posts (replace with a database later) ──────────────────────────────
 POSTS = [
@@ -122,4 +120,4 @@ def resume():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True)
