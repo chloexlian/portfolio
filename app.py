@@ -96,6 +96,10 @@ def post(post_id):
         return redirect(url_for("blog"))
     return render_template("post.html", post=p)
 
+@app.route('/fitcheck')
+def fitcheck():
+    return render_template('fitcheck.html')
+
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
