@@ -104,6 +104,10 @@ def post(post_id):
 def fitcheck():
     return render_template('fitcheck.html')
 
+@app.route('/phishing-aware')
+def phishing():
+    return render_template('phishing-aware.html')
+
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
