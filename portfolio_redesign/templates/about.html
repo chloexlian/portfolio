@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <p class="page-label">About me</p>
+    <h1 class="page-title">Nice to meet you.</h1>
+    <p class="page-subtitle">The full story where I'm from, how I got here, and what actually keeps me up at night (security-wise and otherwise).</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-layout">
+    <div class="about-main">
+      <h2>Where I'm from</h2>
+      <p>Born in Arizona, raised mostly in China and Vietnam, with a year in San Francisco somewhere in the middle. I moved schools 12 times growing up. What that gave me was the ability to adapt fast, read rooms quickly, and find common ground with almost anyone skills I now use just as much in tech as anywhere else.</p>
+
+      <h2>How I ended up in cybersecurity</h2>
+      <p>It started with game mods. Minecraft, GTA I was always more interested in how the game worked than in actually playing it. That curiosity evolved, and at some point I figured out enough to pirate games instead of buying them. Then I got <em>banned from GitHub</em> and had to write an appeal to get my account back.</p>
+      <p>That moment stuck with me. If I a kid with no formal training could do that, what could someone with actual resources and bad intentions do? I've been thinking about that question ever since. It's also why I care so much about <em>security education</em>: most people don't know what they don't know, and that gap is exactly where scammers live.</p>
+      <p>I've watched people my age get scammed on TikTok Shop. I've seen grandparents receive AI-generated voice calls pretending to be their grandchildren begging for money. These aren't abstract threats they're happening to people I know. That's what makes this field feel urgent and personal to me.</p>
+
+      <h2>The other side of me</h2>
+      <p>I'm into psychology, marketing, aesthetics, and fashion in the same way I'm into cybersecurity I'm fascinated by why people do what they do and how to communicate things visually in a way that actually lands. I hate outdated websites. I do yoga and pilates. I love Pokémon. I speak conversational Mandarin after growing up in China.</p>
+
+      <h2>Why it all connects</h2>
+      <p>Security awareness is a <em>marketing problem</em> as much as a technical one. Getting someone to care about their password manager requires the same skills as getting someone to buy something you have to understand your audience, meet them where they are, and make it feel relevant to their life. That intersection is exactly where I want to work.</p>
+    </div>
+
+    <aside class="about-sidebar">
+      <div class="sidebar-card">
+        <h3>Education</h3>
+        <p><strong>Oregon State University</strong><br>B.S. Computer Science<br>Concentration: Cybersecurity<br>Expected June 2027</p>
+      </div>
+      <div class="sidebar-card">
+        <h3>Currently learning</h3>
+        <ul class="skill-list">
+          <li>ISC2 CC Certification</li>
+          <li>Google Cybersecurity Certificate</li>
+          <li>CTF competitions (picoCTF, NCL)</li>
+          <li>TryHackMe · HackTheBox</li>
+        </ul>
+      </div>
+      <div class="sidebar-card">
+        <h3>Technical skills</h3>
+        <ul class="skill-list">
+          <li>Python · C++ · JavaScript</li>
+          <li>SQL · R · HTML/CSS · Flask</li>
+          <li>Wireshark · Nmap · Metasploit</li>
+          <li>AES Encryption · Auth systems</li>
+        </ul>
+      </div>
+      <div class="sidebar-card">
+        <h3>Outside the screen</h3>
+        <ul class="skill-list">
+          <li>Yoga &amp; pilates</li>
+          <li>Pokémon &amp; Minecraft</li>
+          <li>Fashion &amp; social commerce</li>
+          <li>Psychology &amp; marketing</li>
+          <li>Mandarin Chinese</li>
+          <li>Wordle · Connections</li>
+        </ul>
+      </div>
+      <a href="{{ url_for('resume') }}" class="btn btn-primary" style="width:100%;text-align:center;display:block;margin-top:4px;">Download CV</a>
+      <a href="{{ url_for('contact') }}" class="btn btn-outline" style="width:100%;text-align:center;display:block;margin-top:10px;">Say hello</a>
+    </aside>
+  </div>
+
+  <div class="container">
+    <div class="fun-facts">
+      <div class="fun-fact">
+        <div class="fun-fact-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#999" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="fun-fact-text">Born in Arizona · raised in China &amp; Vietnam · year in San Francisco</div>
+      </div>
+      <div class="fun-fact">
+        <div class="fun-fact-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#999" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="fun-fact-text">Started coding by modding Minecraft &amp; GTA. Got banned from GitHub. Appealed. Learned a lot.</div>
+      </div>
+      <div class="fun-fact">
+        <div class="fun-fact-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#999" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="fun-fact-text">Genuinely believes good security and good design can coexist. Will die on this hill.</div>
+      </div>
+      <div class="fun-fact">
+        <div class="fun-fact-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#999" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="fun-fact-text">Bilingual in English and Mandarin. Security communication that crosses language barriers matters.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitCheck — Fashion Link Security Scanner</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF6F1;
+    --cream-dark: #F2EBE0;
+    --terra: #C1694F;
+    --terra-light: #D4836A;
+    --terra-pale: #F5E8E2;
+    --brown: #7A5C4A;
+    --brown-light: #A07A65;
+    --text: #2C1F15;
+    --text-muted: #8C6E5D;
+    --border: rgba(122, 92, 74, 0.18);
+    --border-strong: rgba(122, 92, 74, 0.35);
+    --green: #4A7C5E;
+    --green-pale: #E8F3EC;
+    --red: #C1494A;
+    --red-pale: #F5E8E8;
+    --amber: #C17B3A;
+    --amber-pale: #F5EDE0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(250, 246, 241, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--terra);
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--terra); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(193,105,79,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.1s forwards;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.0;
+    color: var(--text);
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero h1 span { color: var(--terra); }
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .btn-primary {
+    background: var(--terra);
+    color: var(--cream);
+    border: none;
+    padding: 0.85rem 2.2rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--terra-light); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--terra);
+    border: 0.5px solid var(--terra);
+    padding: 0.85rem 2.2rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-outline:hover { background: var(--terra-pale); }
+
+  .hero-stat-row {
+    margin-top: 5rem;
+    display: flex; gap: 3rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.65s forwards;
+  }
+  .stat { border-left: 1px solid var(--border-strong); padding-left: 1.2rem; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-style: italic;
+    color: var(--terra);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.3rem; }
+
+  /* DEMO SECTION */
+  .section { padding: 6rem 3rem; }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.15;
+    max-width: 560px;
+  }
+  .section-sub { color: var(--text-muted); max-width: 480px; margin-top: 1rem; font-size: 0.95rem; }
+
+  .demo-wrapper {
+    margin-top: 3.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border: 0.5px solid var(--border-strong);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 960px;
+  }
+  .demo-input-panel, .demo-result-panel {
+    background: var(--cream);
+    padding: 2.5rem;
+  }
+  .demo-input-panel { background: var(--cream-dark); }
+
+  .demo-panel-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .url-input-wrap {
+    display: flex;
+    border: 0.5px solid var(--border-strong);
+    background: var(--cream);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .url-input-wrap input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.9rem 1rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+  }
+  .url-input-wrap input::placeholder { color: var(--text-muted); }
+  .scan-btn {
+    background: var(--terra);
+    color: var(--cream);
+    border: none;
+    padding: 0 1.5rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .scan-btn:hover { background: var(--terra-light); }
+
+  .preset-label { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+  .presets { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .preset-pill {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.9rem;
+    border: 0.5px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--cream);
+    color: var(--brown);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Jost', sans-serif;
+  }
+  .preset-pill:hover { background: var(--terra-pale); border-color: var(--terra); color: var(--terra); }
+
+  /* RESULT STATES */
+  .result-idle { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; color: var(--text-muted); text-align: center; gap: 1rem; }
+  .result-idle .idle-icon { font-size: 2.5rem; opacity: 0.3; }
+  .result-idle p { font-size: 0.85rem; }
+
+  .result-scanning { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; gap: 1.5rem; }
+  .scanning-ring {
+    width: 60px; height: 60px;
+    border: 2px solid var(--border);
+    border-top-color: var(--terra);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  .scanning-text { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+
+  .result-card { display: none; }
+  .result-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .score-badge {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .score-safe { background: var(--green-pale); color: var(--green); }
+  .score-warn { background: var(--amber-pale); color: var(--amber); }
+  .score-danger { background: var(--red-pale); color: var(--red); }
+
+  .result-verdict { flex: 1; }
+  .verdict-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+  .verdict-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.3rem; margin-top: 0.1rem; }
+
+  .flags-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; }
+  .flag-item {
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    padding: 0.75rem 1rem;
+    border-radius: 2px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .flag-safe { background: var(--green-pale); color: #2D5C40; }
+  .flag-warn { background: var(--amber-pale); color: #7A4E1A; }
+  .flag-danger { background: var(--red-pale); color: #8C2C2C; }
+  .flag-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+  .flag-dot-safe { background: var(--green); }
+  .flag-dot-warn { background: var(--amber); }
+  .flag-dot-danger { background: var(--red); }
+
+  .result-meta { font-size: 0.75rem; color: var(--text-muted); padding-top: 1rem; border-top: 0.5px solid var(--border); }
+
+  /* HOW IT WORKS */
+  .how-bg { background: var(--cream-dark); }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-top: 3.5rem;
+    max-width: 900px;
+  }
+  .step { position: relative; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-style: italic;
+    color: var(--terra);
+    opacity: 0.25;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .step-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* CASE STUDY */
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+    max-width: 900px;
+  }
+  .case-block-title { font-weight: 500; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--terra); margin-bottom: 1rem; }
+  .case-block p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+  .persona-card {
+    background: var(--cream-dark);
+    border: 0.5px solid var(--border-strong);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .persona-name { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.2rem; }
+  .persona-tag { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.08em; }
+  .persona-quote { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem; font-style: italic; border-left: 2px solid var(--terra); padding-left: 0.8rem; line-height: 1.6; }
+
+  /* TECH STACK */
+  .tech-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2rem; }
+  .tech-pill {
+    padding: 0.5rem 1.1rem;
+    border: 0.5px solid var(--border-strong);
+    border-radius: 2px;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--brown);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 3rem;
+    border-top: 0.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.2rem; color: var(--terra); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 0.72rem; color: var(--text-muted); text-decoration: none; letter-spacing: 0.08em; }
+  .footer-links a:hover { color: var(--terra); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero, .section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .demo-wrapper { grid-template-columns: 1fr; }
+    .case-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-stat-row { gap: 1.5rem; }
+    footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">FitCheck</div>
+  <div class="nav-links">
+    <a href="#demo">Demo</a>
+    <a href="#how">How it works</a>
+    <a href="#case">Case study</a>
+    <a href="/">← Portfolio</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Browser Extension · Security Tool · UX Design</p>
+  <h1>Is your <span>fit</span> safe to click?</h1>
+  <p class="hero-sub">FitCheck scans TikTok Shop links, viral product URLs, and seller pages for phishing signals, data privacy risks, and scam red flags — before you hand over your card number.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Try the demo</button>
+    <a href="#case" class="btn-outline">Read the case study</a>
+  </div>
+  <div class="hero-stat-row">
+    <div class="stat">
+      <div class="stat-num">1 in 3</div>
+      <div class="stat-label">TikTok Shop sellers are unverified</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$8.8B</div>
+      <div class="stat-label">Lost to online shopping fraud in 2023</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Gen Z</div>
+      <div class="stat-label">Most targeted demographic</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="section" id="demo">
+  <p class="section-label">Interactive Demo</p>
+  <h2 class="section-title">Scan any shopping link in seconds</h2>
+  <p class="section-sub">Paste a URL or try one of the sample links below — this simulates how FitCheck works as a browser extension.</p>
+
+  <div class="demo-wrapper">
+    <div class="demo-input-panel">
+      <p class="demo-panel-label">Paste a link to scan</p>
+      <div class="url-input-wrap">
+        <input type="text" id="urlInput" placeholder="https://tiktokshop.com/product/..." />
+        <button class="scan-btn" onclick="runScan()">Scan →</button>
+      </div>
+      <p class="preset-label">Try a sample:</p>
+      <div class="presets">
+        <button class="preset-pill" onclick="loadPreset('safe')">✓ Legitimate store</button>
+        <button class="preset-pill" onclick="loadPreset('warn')">⚠ Suspicious link</button>
+        <button class="preset-pill" onclick="loadPreset('danger')">✗ Phishing site</button>
+        <button class="preset-pill" onclick="loadPreset('seller')">TikTok seller page</button>
+      </div>
+    </div>
+
+    <div class="demo-result-panel" id="resultPanel">
+      <p class="demo-panel-label">Scan results</p>
+
+      <div class="result-idle" id="stateIdle">
+        <div class="idle-icon">◎</div>
+        <p>Your results will appear here.</p>
+      </div>
+
+      <div class="result-scanning" id="stateScanning">
+        <div class="scanning-ring"></div>
+        <p class="scanning-text">Analyzing link…</p>
+      </div>
+
+      <div class="result-card" id="stateResult">
+        <div class="result-header">
+          <div class="score-badge" id="scoreBadge"></div>
+          <div class="result-verdict">
+            <div class="verdict-label">Verdict</div>
+            <div class="verdict-text" id="verdictText"></div>
+          </div>
+        </div>
+        <div class="flags-list" id="flagsList"></div>
+        <div class="result-meta" id="resultMeta"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-bg" id="how">
+  <p class="section-label">Architecture</p>
+  <h2 class="section-title">How FitCheck works</h2>
+  <div class="steps-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Extension detects a link</div>
+      <div class="step-desc">The Chrome extension intercepts shopping URLs on TikTok, Instagram, and known redirect domains when you hover or click.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">FastAPI backend analyzes</div>
+      <div class="step-desc">The Python backend checks domain age, SSL validity, seller verification status, redirect chains, and known scam databases.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Privacy audit runs</div>
+      <div class="step-desc">FitCheck flags excessive data collection, missing privacy policies, third-party trackers, and unusual permissions requests.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-title">Results in plain language</div>
+      <div class="step-desc">No jargon. Every flag is explained in one sentence so you can make a confident decision — even if you've never heard of DNS before.</div>
+    </div>
+  </div>
+
+  <div class="tech-row" style="margin-top:3rem;">
+    <span class="tech-pill">Chrome Extension (Manifest V3)</span>
+    <span class="tech-pill">Python FastAPI</span>
+    <span class="tech-pill">WHOIS / DNS lookup</span>
+    <span class="tech-pill">SSL verification</span>
+    <span class="tech-pill">VirusTotal API</span>
+    <span class="tech-pill">Popup.html UI</span>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="section" id="case">
+  <p class="section-label">Case Study</p>
+  <h2 class="section-title">Why I built this</h2>
+
+  <div class="case-grid">
+    <div>
+      <div class="case-block-title">The problem</div>
+      <p>TikTok Shop made buying impulsive and frictionless — but it also removed every signal we used to judge a seller's trustworthiness. No eBay seller ratings. No Amazon reviews. Just a video, a price, and a link. Gen Z is clicking first and questioning later, and scammers know it. I wanted to put a security layer between the "add to cart" dopamine hit and the actual checkout.</p>
+
+      <div class="persona-card">
+        <div class="persona-name">Mia, 21</div>
+        <div class="persona-tag">College student · TikTok Shop power user</div>
+        <div class="persona-quote">"I've been burned twice. Once was a fake Stanley dupe that never arrived. Now I screenshot every seller page before I buy, but I don't actually know what I'm looking for."</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="case-block-title">Design decisions</div>
+      <p>The biggest challenge was communicating risk without causing panic. Security tools default to red everything — which teaches users to ignore warnings. FitCheck uses a traffic-light metaphor but softens it with Jost body copy and plain-English explanations. Every flag tells you <em>what</em> it means and <em>why it matters</em>, not just that something is wrong.</p>
+
+      <div style="margin-top:1.5rem;">
+        <div class="case-block-title">What I learned</div>
+        <p>Security UX is fundamentally a communication problem. The technical signals are well-understood — the hard part is translating them into language that creates the right level of concern without overwhelming a user who just wants a $12 phone case. That tension between friction and safety is what I want to keep designing around.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">FitCheck</div>
+  <div class="footer-links">
+    <a href="/">Portfolio</a>
+    <a href="https://github.com/" target="_blank">GitHub</a>
+    <a href="mailto:chloelian8@gmail.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+const PRESETS = {
+  safe: {
+    url: 'https://www.aritzia.com/us/en/product/effortless-pant',
+    score: 'A',
+    scoreClass: 'score-safe',
+    verdict: 'Looks safe to shop',
+    flags: [
+      { type: 'safe', text: 'Domain registered 14 years ago — established retailer' },
+      { type: 'safe', text: 'Valid SSL certificate (expires Jan 2026)' },
+      { type: 'safe', text: 'No suspicious redirects detected' },
+      { type: 'safe', text: 'Privacy policy found and readable' },
+    ],
+    meta: 'Scanned via WHOIS · SSL check · VirusTotal · 0 threats detected'
+  },
+  warn: {
+    url: 'https://tik-tok-deals-shop24.com/viral-bag-sale',
+    score: 'C',
+    scoreClass: 'score-warn',
+    verdict: 'Proceed with caution',
+    flags: [
+      { type: 'warn', text: 'Domain registered 18 days ago — very new for a retail site' },
+      { type: 'safe', text: 'SSL certificate present' },
+      { type: 'warn', text: '3 redirect hops before destination — unusual' },
+      { type: 'warn', text: 'No verified seller status on any platform' },
+    ],
+    meta: 'Scanned via WHOIS · SSL check · Redirect chain analysis · Review before purchasing'
+  },
+  danger: {
+    url: 'https://appl3-iphone-giveaway-claim.xyz/form',
+    score: 'F',
+    scoreClass: 'score-danger',
+    verdict: 'Do not visit this link',
+    flags: [
+      { type: 'danger', text: 'Domain flagged in VirusTotal — known phishing source' },
+      { type: 'danger', text: 'Lookalike domain mimicking Apple (appl3 vs apple)' },
+      { type: 'danger', text: 'SSL certificate is self-signed — not issued by trusted CA' },
+      { type: 'danger', text: 'Form requests credit card before showing any product' },
+    ],
+    meta: 'Scanned via VirusTotal · WHOIS · SSL · Heuristic analysis · 4 threats detected'
+  },
+  seller: {
+    url: 'https://www.tiktok.com/shop/@glowskincarestudio',
+    score: 'B',
+    scoreClass: 'score-safe',
+    verdict: 'Seller appears legitimate',
+    flags: [
+      { type: 'safe', text: 'TikTok verified seller badge detected' },
+      { type: 'safe', text: 'Account created 8 months ago — established presence' },
+      { type: 'warn', text: 'No external website or business registration found' },
+      { type: 'safe', text: 'Return policy visible and readable' },
+    ],
+    meta: 'Scanned via TikTok Seller API · WHOIS · Business registry check'
+  }
+};
+
+function setState(name) {
+  document.getElementById('stateIdle').style.display = name === 'idle' ? 'flex' : 'none';
+  document.getElementById('stateScanning').style.display = name === 'scanning' ? 'flex' : 'none';
+  document.getElementById('stateResult').style.display = name === 'result' ? 'block' : 'none';
+}
+
+function loadPreset(key) {
+  document.getElementById('urlInput').value = PRESETS[key].url;
+  runScan(key);
+}
+
+function runScan(presetKey) {
+  const input = document.getElementById('urlInput').value.trim();
+  if (!input && !presetKey) return;
+
+  const key = presetKey || detectPreset(input);
+  setState('scanning');
+
+  setTimeout(() => {
+    const data = PRESETS[key] || PRESETS['warn'];
+    showResult(data);
+  }, 1600);
+}
+
+function detectPreset(url) {
+  if (url.includes('aritzia') || url.includes('zara') || url.includes('nordstrom')) return 'safe';
+  if (url.includes('xyz') || url.includes('giveaway') || url.includes('claim')) return 'danger';
+  if (url.includes('tiktok.com/shop/@')) return 'seller';
+  return 'warn';
+}
+
+function showResult(data) {
+  const badge = document.getElementById('scoreBadge');
+  badge.textContent = data.score;
+  badge.className = 'score-badge ' + data.scoreClass;
+  document.getElementById('verdictText').textContent = data.verdict;
+
+  const list = document.getElementById('flagsList');
+  list.innerHTML = data.flags.map(f => `
+    <div class="flag-item flag-${f.type}">
+      <div class="flag-dot flag-dot-${f.type}"></div>
+      <span>${f.text}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('resultMeta').textContent = data.meta;
+  setState('result');
+}
+
+setState('idle');
+</script>
+</body>
+</html>

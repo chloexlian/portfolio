@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Don't Take the Bait — Phishing Awareness</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF6F1;--cream-dark:#F2EBE0;--terra:#C1694F;--terra-light:#D4836A;--terra-pale:#F5E8E2;--text:#2C1F15;--text-muted:#8C6E5D;--border:rgba(122,92,74,0.18);--border-strong:rgba(122,92,74,0.32);--red:#B83232;--red-pale:#FAEAEA;--green:#3D7A57;--green-pale:#E6F3EC;--amber:#B87832;--amber-pale:#FBF0E0;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.1rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(250,246,241,0.94);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem;color:var(--terra);text-decoration:none;}
+.nav-links{display:flex;gap:2rem;}
+.nav-links a{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--terra);}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 3rem 5rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:clamp(8rem,20vw,18rem);font-style:italic;color:rgba(193,105,79,0.05);white-space:nowrap;pointer-events:none;user-select:none;}
+.hero-content{position:relative;z-index:1;max-width:680px;}
+.eyebrow{font-size:0.65rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--terra);margin-bottom:1.2rem;opacity:0;animation:fadeUp 0.7s 0.1s forwards;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,8vw,6.5rem);font-style:italic;font-weight:500;line-height:1.0;opacity:0;animation:fadeUp 0.8s 0.2s forwards;}
+.hero h1 em{color:var(--terra);}
+.hero-sub{margin-top:1.5rem;font-size:1rem;color:var(--text-muted);max-width:500px;line-height:1.8;opacity:0;animation:fadeUp 0.8s 0.35s forwards;}
+.hero-cta{margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.5s forwards;}
+.btn-primary{background:var(--terra);color:var(--cream);border:none;padding:0.85rem 2.2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s;text-decoration:none;display:inline-block;}
+.btn-primary:hover{background:var(--terra-light);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--terra);border:0.5px solid var(--terra);padding:0.85rem 2.2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.2s;text-decoration:none;display:inline-block;}
+.btn-outline:hover{background:var(--terra-pale);}
+.hero-stats{margin-top:5rem;display:flex;gap:3rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.8s 0.65s forwards;}
+.stat{border-left:1px solid var(--border-strong);padding-left:1.2rem;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-style:italic;color:var(--terra);line-height:1;}
+.stat-label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-top:0.3rem;}
+.section{padding:6rem 3rem;}
+.section-alt{background:var(--cream-dark);}
+.container{max-width:980px;margin:0 auto;}
+.section-eyebrow{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--terra);margin-bottom:0.8rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-style:italic;font-weight:500;line-height:1.15;max-width:560px;}
+.section-sub{color:var(--text-muted);max-width:520px;margin-top:1rem;font-size:0.92rem;line-height:1.8;}
+
+/* TABS */
+.example-tabs{display:flex;gap:0;margin-top:2.5rem;border-bottom:2px solid var(--border);}
+.example-tab{padding:0.7rem 1.5rem;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;background:transparent;border:none;cursor:pointer;color:var(--text-muted);font-family:'Jost',sans-serif;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+.example-tab.active{color:var(--terra);border-bottom-color:var(--terra);}
+.example-pane{display:none;margin-top:2rem;}
+.example-pane.active{display:block;}
+
+/* FLAG SYSTEM */
+.flag{position:relative;display:inline;background:rgba(184,50,50,0.13);outline:2px dashed var(--red);outline-offset:2px;cursor:pointer;border-radius:2px;transition:background 0.2s;}
+.flag:hover{background:rgba(184,50,50,0.26);}
+.flag-num{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:600;vertical-align:super;margin-left:2px;font-family:'Jost',sans-serif;}
+.flag-tooltip{display:none;position:absolute;z-index:50;bottom:calc(100% + 10px);left:0;background:#1c1c1c;color:#fff;border-radius:6px;padding:10px 13px;width:220px;font-size:12px;line-height:1.55;font-family:'Jost',sans-serif;font-weight:300;box-shadow:0 4px 24px rgba(0,0,0,0.3);pointer-events:none;}
+.flag-tooltip::after{content:'';position:absolute;top:100%;left:14px;border:6px solid transparent;border-top-color:#1c1c1c;}
+.flag:hover .flag-tooltip{display:block;}
+.flag-title{font-weight:500;color:#ff9a9a;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;}
+
+/* GMAIL */
+.gmail-wrap{background:#fff;border-radius:8px;box-shadow:0 2px 30px rgba(0,0,0,0.12);overflow:hidden;max-width:780px;font-family:'Google Sans',Roboto,Arial,sans-serif;}
+.gmail-topbar{background:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #e0e0e0;}
+.gmail-logo{font-size:22px;font-weight:700;letter-spacing:-1px;}
+.gmail-logo span:nth-child(1){color:#4285F4}.gmail-logo span:nth-child(2){color:#EA4335}.gmail-logo span:nth-child(3){color:#FBBC05}.gmail-logo span:nth-child(4){color:#4285F4}.gmail-logo span:nth-child(5){color:#34A853}.gmail-logo span:nth-child(6){color:#EA4335}.gmail-logo span:nth-child(7){color:#4285F4}
+.gmail-search{flex:1;background:#EAF1FB;border-radius:24px;padding:8px 16px;font-size:14px;color:#444;display:flex;align-items:center;gap:8px;}
+.gmail-avatar{width:32px;height:32px;border-radius:50%;background:#C1694F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;}
+.gmail-body{display:flex;}
+.gmail-sidebar{width:190px;padding:8px 0;border-right:1px solid #f1f3f4;flex-shrink:0;}
+.gmail-compose{margin:8px 12px 16px;background:#C2E7FF;border-radius:16px;padding:14px 20px;font-size:14px;font-weight:500;color:#001D35;display:flex;align-items:center;gap:8px;cursor:pointer;}
+.gmail-nav-item{padding:4px 16px;font-size:14px;border-radius:0 16px 16px 0;display:flex;align-items:center;gap:10px;color:#444;cursor:pointer;}
+.gmail-nav-item.active{background:#D3E3FD;font-weight:500;color:#041E49;}
+.gmail-main{flex:1;min-width:0;}
+.gmail-email-header{padding:16px 24px 12px;border-bottom:1px solid #e0e0e0;}
+.gmail-subject-line{font-size:20px;font-weight:500;color:#202124;margin-bottom:12px;}
+.gmail-from-row{display:flex;align-items:flex-start;gap:12px;}
+.gmail-from-avatar{width:40px;height:40px;border-radius:50%;background:#EA4335;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;flex-shrink:0;}
+.gmail-from-name{font-size:14px;font-weight:500;color:#202124;}
+.gmail-from-addr{font-size:12px;color:#5f6368;}
+.gmail-time{font-size:12px;color:#5f6368;margin-left:auto;}
+.gmail-email-body{padding:20px 24px;font-size:14px;color:#202124;line-height:1.8;}
+.gmail-email-body p{margin-bottom:12px;}
+.gmail-btn{display:inline-block;background:#1a73e8;color:#fff;padding:10px 24px;border-radius:4px;font-size:14px;text-decoration:none;cursor:pointer;}
+.gmail-footer-text{font-size:11px;color:#5f6368;margin-top:16px;}
+
+/* OUTLOOK */
+.outlook-wrap{background:#fff;border-radius:4px;box-shadow:0 2px 30px rgba(0,0,0,0.12);overflow:hidden;max-width:780px;font-family:'Segoe UI',Tahoma,sans-serif;}
+.outlook-topbar{background:#0F6CBD;padding:8px 16px;display:flex;align-items:center;gap:16px;}
+.outlook-logo{color:#fff;font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.outlook-logo-icon{width:28px;height:28px;background:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#0F6CBD;font-size:18px;font-weight:700;}
+.outlook-topbar-btns{margin-left:auto;display:flex;gap:8px;}
+.outlook-topbar-btn{background:rgba(255,255,255,0.15);color:#fff;border:none;padding:5px 14px;border-radius:3px;font-size:12px;cursor:pointer;}
+.outlook-body{display:flex;}
+.outlook-sidebar{width:190px;background:#f3f2f1;border-right:1px solid #edebe9;padding:8px 0;flex-shrink:0;}
+.outlook-nav-item{padding:6px 16px;font-size:13px;color:#323130;display:flex;align-items:center;gap:8px;cursor:pointer;border-left:3px solid transparent;}
+.outlook-nav-item.active{background:#e5e5e5;border-left-color:#0F6CBD;font-weight:600;}
+.outlook-list{width:240px;border-right:1px solid #edebe9;flex-shrink:0;}
+.outlook-list-header{padding:10px 16px;font-size:18px;font-weight:600;color:#323130;border-bottom:1px solid #edebe9;}
+.outlook-list-item{padding:10px 16px;border-bottom:1px solid #edebe9;cursor:pointer;}
+.outlook-list-item.selected{background:#EEF6FC;border-left:3px solid #0F6CBD;}
+.outlook-list-from{font-size:13px;font-weight:600;color:#323130;}
+.outlook-list-subj{font-size:12px;color:#605e5c;}
+.outlook-list-prev{font-size:11px;color:#a19f9d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.outlook-reading{flex:1;padding:20px 24px;min-width:0;}
+.outlook-reading-subject{font-size:20px;font-weight:600;color:#323130;margin-bottom:8px;}
+.outlook-reading-from{font-size:13px;color:#605e5c;margin-bottom:4px;}
+.outlook-reading-time{font-size:12px;color:#a19f9d;margin-bottom:20px;}
+.outlook-reading-body{font-size:14px;color:#323130;line-height:1.8;}
+.outlook-reading-body p{margin-bottom:10px;}
+.outlook-btn{display:inline-block;background:#0F6CBD;color:#fff;padding:8px 20px;border-radius:3px;font-size:13px;text-decoration:none;cursor:pointer;}
+
+/* TIKTOK */
+.tiktok-phone{width:300px;margin:0 auto;background:#111;border-radius:36px;padding:10px;box-shadow:0 8px 40px rgba(0,0,0,0.4);}
+.tiktok-screen{background:#000;border-radius:28px;overflow:hidden;}
+.tiktok-statusbar{padding:10px 18px 4px;display:flex;justify-content:space-between;align-items:center;}
+.tiktok-time{color:#fff;font-size:12px;font-weight:600;font-family:system-ui;}
+.tiktok-icons{color:#fff;font-size:10px;font-family:system-ui;}
+.tiktok-video-bg{width:100%;background:linear-gradient(160deg,#1a0533 0%,#0d1b2a 50%,#1a0a0a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px 16px;position:relative;min-height:340px;}
+.tiktok-product-img{width:110px;height:110px;background:linear-gradient(135deg,#ff6b6b,#ff8e8e);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+.tiktok-product-name{color:#fff;font-size:13px;font-weight:600;font-family:system-ui;text-align:center;}
+.tiktok-price{color:#fe2c55;font-size:22px;font-weight:700;font-family:system-ui;}
+.tiktok-original{color:rgba(255,255,255,0.45);font-size:11px;text-decoration:line-through;font-family:system-ui;}
+.tiktok-right{position:absolute;right:10px;bottom:16px;display:flex;flex-direction:column;gap:14px;align-items:center;}
+.tiktok-action{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tiktok-action-icon{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;}
+.tiktok-action-label{color:rgba(255,255,255,0.75);font-size:9px;font-family:system-ui;}
+.tiktok-bottom{background:rgba(0,0,0,0.85);padding:10px 12px;}
+.tiktok-username{color:#fff;font-size:13px;font-weight:700;font-family:system-ui;margin-bottom:3px;}
+.tiktok-caption{color:rgba(255,255,255,0.82);font-size:11px;font-family:system-ui;line-height:1.4;margin-bottom:8px;}
+.tiktok-shop-btn{background:#fe2c55;color:#fff;border:none;border-radius:4px;padding:10px 16px;font-size:12px;font-weight:700;width:100%;font-family:system-ui;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+.tiktok-nav{display:flex;justify-content:space-around;padding:8px 0 4px;background:#000;border-top:0.5px solid rgba(255,255,255,0.1);}
+.tiktok-nav-item{display:flex;flex-direction:column;align-items:center;gap:1px;color:rgba(255,255,255,0.55);font-size:8px;font-family:system-ui;}
+.tiktok-nav-item.active{color:#fff;}
+.tiktok-nav-icon{font-size:18px;}
+
+/* tiktok tooltip adjustments */
+.tt-flag{position:relative;display:inline-block;}
+.tt-flag .flag-tooltip{bottom:auto;top:calc(100% + 8px);left:0;right:auto;}
+.tt-flag .flag-tooltip::after{top:auto;bottom:100%;left:14px;border-top-color:transparent;border-bottom-color:#1c1c1c;}
+
+/* LEGEND */
+.flags-legend{margin-top:2rem;display:flex;flex-direction:column;gap:0.65rem;}
+.legend-item{display:flex;gap:1rem;align-items:flex-start;padding:0.8rem 1rem;background:var(--red-pale);border:0.5px solid rgba(184,50,50,0.2);border-radius:4px;font-size:0.82rem;}
+.legend-num{width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:1px;}
+.legend-text{flex:1;color:#6B2020;line-height:1.5;}
+.legend-text strong{color:var(--red);display:block;margin-bottom:2px;}
+.legend-item.amber-item{background:var(--amber-pale);border-color:rgba(184,120,50,0.2);}
+.legend-item.amber-item .legend-num{background:var(--amber);}
+.legend-item.amber-item .legend-text{color:#5C3A10;}
+.legend-item.amber-item .legend-text strong{color:var(--amber);}
+
+/* QUIZ */
+.quiz-counter{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.2rem;}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:2.5rem;overflow:hidden;}
+.progress-fill{height:100%;background:var(--terra);border-radius:2px;transition:width 0.4s ease;}
+.quiz-card{background:#fff;border:0.5px solid var(--border-strong);border-radius:4px;overflow:hidden;box-shadow:0 2px 20px rgba(122,92,74,0.06);margin-top:2rem;}
+.quiz-preview{padding:1.5rem;border-bottom:0.5px solid var(--border);font-size:0.83rem;line-height:1.7;color:#333;}
+.quiz-from{font-size:0.75rem;color:var(--text-muted);margin-bottom:4px;}
+.quiz-subject{font-weight:500;color:var(--text);margin-bottom:8px;font-size:0.9rem;}
+.quiz-body{color:#444;}
+.quiz-question{padding:1rem 1.5rem;background:var(--cream-dark);border-bottom:0.5px solid var(--border);font-size:0.88rem;font-weight:500;color:var(--text);}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;}
+.quiz-option{padding:1rem 1.5rem;font-size:0.85rem;color:var(--text-muted);cursor:pointer;border:none;background:transparent;text-align:left;font-family:'Jost',sans-serif;font-weight:300;transition:all 0.15s;border-top:0.5px solid var(--border);display:flex;align-items:center;gap:8px;}
+.quiz-option:first-child{border-right:0.5px solid var(--border);}
+.quiz-option:hover:not(:disabled){background:var(--cream-dark);color:var(--text);}
+.quiz-option.correct{background:var(--green-pale);color:var(--green);}
+.quiz-option.wrong{background:var(--red-pale);color:var(--red);}
+.quiz-option:disabled{cursor:default;}
+.quiz-feedback{display:none;padding:1rem 1.5rem;font-size:0.82rem;line-height:1.6;border-top:0.5px solid var(--border);}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.correct-fb{background:var(--green-pale);color:#2A5C3D;}
+.quiz-feedback.wrong-fb{background:var(--red-pale);color:#6B2020;}
+.quiz-feedback strong{display:block;margin-bottom:3px;font-weight:500;}
+.quiz-nav{padding:1rem 1.5rem;display:flex;justify-content:flex-end;border-top:0.5px solid var(--border);}
+.next-btn{background:var(--terra);color:var(--cream);border:none;padding:0.65rem 1.8rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;display:none;}
+.next-btn:hover{background:var(--terra-light);}
+.next-btn.show{display:block;}
+.quiz-results{display:none;text-align:center;padding:3rem 2rem;background:#fff;border:0.5px solid var(--border-strong);border-radius:4px;margin-top:2rem;}
+.results-score{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:5rem;color:var(--terra);line-height:1;}
+.results-verdict{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.6rem;margin-top:1rem;}
+.results-msg{font-size:0.9rem;color:var(--text-muted);margin-top:0.8rem;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.7;}
+.retry-btn{margin-top:1.5rem;background:transparent;color:var(--terra);border:0.5px solid var(--terra);padding:0.65rem 2rem;font-family:'Jost',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;}
+
+/* TIPS */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.5rem;margin-top:3rem;}
+.tip-card{border-top:2px solid var(--terra);padding-top:1.2rem;}
+.tip-num{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:2.5rem;color:var(--terra);opacity:0.25;line-height:1;margin-bottom:0.4rem;}
+.tip-title{font-size:0.9rem;font-weight:500;margin-bottom:0.4rem;}
+.tip-body{font-size:0.82rem;color:var(--text-muted);line-height:1.6;}
+.cta-band{background:var(--cream-dark);padding:5rem 3rem;text-align:center;}
+.cta-band h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(2rem,4vw,3rem);}
+.cta-band p{color:var(--text-muted);margin-top:0.8rem;max-width:460px;margin-left:auto;margin-right:auto;}
+.cta-actions{margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+footer{padding:2.5rem 3rem;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--terra);}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{font-size:0.72rem;color:var(--text-muted);text-decoration:none;}
+.footer-links a:hover{color:var(--terra);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.hero,.section{padding-left:1.5rem;padding-right:1.5rem;}.quiz-options{grid-template-columns:1fr;}.quiz-option:first-child{border-right:none;}footer{flex-direction:column;text-align:center;padding:2rem 1.5rem;}.hero-stats{gap:1.5rem;}.gmail-sidebar,.outlook-sidebar,.outlook-list{display:none;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Don't Take the Bait</a>
+  <div class="nav-links">
+    <a href="#spot">Spot the flags</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#tips">Stay safe</a>
+    <a href="/">← Portfolio</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg">Phish</div>
+  <div class="hero-content">
+    <p class="eyebrow">Security Awareness · Interactive Guide</p>
+    <h1>Don't take<br>the <em>bait.</em></h1>
+    <p class="hero-sub">Phishing is the most common cyberattack in the world — and it works because it's designed to look exactly like something you trust. Learn to spot the signs in under 5 minutes.</p>
+    <div class="hero-cta">
+      <a href="#spot" class="btn-primary">See a real example</a>
+      <a href="#quiz" class="btn-outline">Take the quiz</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">3.4B</div><div class="stat-label">Phishing emails sent daily</div></div>
+      <div class="stat"><div class="stat-num">36%</div><div class="stat-label">Of breaches involve phishing</div></div>
+      <div class="stat"><div class="stat-num">$17.7K</div><div class="stat-label">Lost per minute to phishing</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPOT THE FLAGS -->
+<section class="section section-alt" id="spot">
+  <div class="container">
+    <p class="section-eyebrow">Spot the red flags</p>
+    <h2 class="section-title">These look real. They aren't.</h2>
+    <p class="section-sub">Hover over the highlighted sections to reveal each red flag. Switch between Gmail, Outlook, and TikTok Shop to see how scams appear across different platforms.</p>
+
+    <div class="example-tabs">
+      <button class="example-tab active" onclick="showTab('gmail',this)">Gmail</button>
+      <button class="example-tab" onclick="showTab('outlook',this)">Outlook</button>
+      <button class="example-tab" onclick="showTab('tiktok',this)">TikTok Shop</button>
+    </div>
+
+    <!-- GMAIL -->
+    <div class="example-pane active" id="pane-gmail">
+      <div class="gmail-wrap">
+        <div class="gmail-topbar">
+          <div class="gmail-logo"><span>G</span><span>m</span><span>a</span><span>i</span><span>l</span></div>
+          <div class="gmail-search">🔍 Search mail</div>
+          <div class="gmail-avatar">C</div>
+        </div>
+        <div class="gmail-body">
+          <div class="gmail-sidebar">
+            <div class="gmail-compose">✏️ Compose</div>
+            <div class="gmail-nav-item active">📥 Inbox <span style="margin-left:auto;font-size:12px;font-weight:600;">3</span></div>
+            <div class="gmail-nav-item">📤 Sent</div>
+            <div class="gmail-nav-item">📝 Drafts</div>
+            <div class="gmail-nav-item">🚫 Spam</div>
+          </div>
+          <div class="gmail-main">
+            <div class="gmail-email-header">
+              <div class="gmail-subject-line">
+                <span class="flag">⚠️ Your Apple ID has been locked — immediate action required<span class="flag-num">1</span><div class="flag-tooltip"><div class="flag-title">Panic subject line</div>Warning emoji + "immediate action required" triggers fear before you even open it. Apple never uses emoji in official subject lines.</div></span>
+              </div>
+              <div class="gmail-from-row">
+                <div class="gmail-from-avatar">A</div>
+                <div style="flex:1;">
+                  <div class="gmail-from-name">Apple Support</div>
+                  <div class="gmail-from-addr"><span class="flag">&lt;security@appl3-account-verify.com&gt;<span class="flag-num">2</span><div class="flag-tooltip"><div class="flag-title">Lookalike domain</div>"appl3" swaps the letter e for a 3. The display name says "Apple Support" — click it to reveal the real address. Always read the full email address.</div></span></div>
+                </div>
+                <div class="gmail-time">10:47 AM</div>
+              </div>
+            </div>
+            <div class="gmail-email-body">
+              <p>Dear Valued Customer,</p>
+              <p>We have detected <span class="flag">unusual sign-in activity from an unrecognized device in Moscow, Russia.<span class="flag-num">3</span><div class="flag-tooltip"><div class="flag-title">Vague foreign threat</div>Mentioning Russia triggers fear, but there are zero specifics — no device name, no exact time. Real Apple security alerts include details you can actually verify.</div></span></p>
+              <p>Your Apple ID has been temporarily suspended. You must verify your identity within <span class="flag">24 hours or your account and all associated data will be permanently deleted.<span class="flag-num">4</span><div class="flag-tooltip"><div class="flag-title">Fake deadline + impossible threat</div>Apple will never permanently delete your account with 24 hours notice. This deadline exists to make you panic and click before thinking critically.</div></span></p>
+              <p><span class="flag" style="display:inline-block;padding:2px 4px;"><span class="gmail-btn">Verify Apple ID →</span><span class="flag-num">5</span><div class="flag-tooltip"><div class="flag-title">Credential harvesting button</div>This leads to a fake Apple login page. Entering your password hands it directly to the attacker. Always go to apple.com directly — never click email buttons to "verify."</div></span></p>
+              <div class="gmail-footer-text">Apple Inc. · <span class="flag">1 Infinite Loop, Cupertino, CA 95014<span class="flag-num">6</span><div class="flag-tooltip"><div class="flag-title">Real address, fake email</div>Copying Apple's real address creates false legitimacy. It means nothing — only the sender domain matters.</div></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flags-legend">
+        <div class="legend-item"><div class="legend-num">1</div><div class="legend-text"><strong>Panic subject line</strong>Warning emoji + "immediate action required" = pressure tactic before you even open it. Real Apple emails don't use emoji.</div></div>
+        <div class="legend-item"><div class="legend-num">2</div><div class="legend-text"><strong>Lookalike domain</strong>"appl3-account-verify.com" — the 3 replaces the e. The display name says "Apple Support" but the real address gives it away. Always expand it.</div></div>
+        <div class="legend-item"><div class="legend-num">3</div><div class="legend-text"><strong>Vague foreign threat</strong>No device name, no timestamp. Real Apple security alerts include specific, verifiable details.</div></div>
+        <div class="legend-item"><div class="legend-num">4</div><div class="legend-text"><strong>Impossible deadline</strong>Apple will never permanently delete your account in 24 hours. Deadlines exist to stop you thinking.</div></div>
+        <div class="legend-item"><div class="legend-num">5</div><div class="legend-text"><strong>Phishing button</strong>Links to a fake login page designed to steal your Apple ID and password. Never click — type apple.com yourself.</div></div>
+        <div class="legend-item"><div class="legend-num">6</div><div class="legend-text"><strong>Real address, fake email</strong>Scammers copy real company details. The physical address means nothing — the sender domain is everything.</div></div>
+      </div>
+    </div>
+
+    <!-- OUTLOOK -->
+    <div class="example-pane" id="pane-outlook">
+      <div class="outlook-wrap">
+        <div class="outlook-topbar">
+          <div class="outlook-logo"><div class="outlook-logo-icon">O</div>Outlook</div>
+          <div class="outlook-topbar-btns">
+            <button class="outlook-topbar-btn">New mail</button>
+            <button class="outlook-topbar-btn">Reply</button>
+          </div>
+        </div>
+        <div class="outlook-body">
+          <div class="outlook-sidebar">
+            <div class="outlook-nav-item active">📥 Inbox</div>
+            <div class="outlook-nav-item">📤 Sent Items</div>
+            <div class="outlook-nav-item">🚫 Junk Email</div>
+            <div class="outlook-nav-item">🗑 Deleted</div>
+          </div>
+          <div class="outlook-list">
+            <div class="outlook-list-header">Inbox</div>
+            <div class="outlook-list-item selected">
+              <div class="outlook-list-from">IT Security Team</div>
+              <div class="outlook-list-subj">URGENT: Password expires in 2hrs</div>
+              <div class="outlook-list-prev">Your network password will expire...</div>
+            </div>
+            <div class="outlook-list-item">
+              <div class="outlook-list-from">GitHub</div>
+              <div class="outlook-list-subj">New sign-in to your account</div>
+              <div class="outlook-list-prev">We noticed a new sign-in to...</div>
+            </div>
+            <div class="outlook-list-item">
+              <div class="outlook-list-from">Mom</div>
+              <div class="outlook-list-subj">Dinner Sunday?</div>
+              <div class="outlook-list-prev">Are you free this weekend?</div>
+            </div>
+          </div>
+          <div class="outlook-reading">
+            <div class="outlook-reading-subject"><span class="flag">URGENT: Your network password expires in 2 hours<span class="flag-num">1</span><div class="flag-tooltip"><div class="flag-title">ALL CAPS urgency</div>Workplace phishing exploits your instinct to respond fast to IT. URGENT + short deadline = stop and verify before doing anything.</div></span></div>
+            <div class="outlook-reading-from">From: <span class="flag">IT Security &lt;itsec@yourcompany-helpdesk.co&gt;<span class="flag-num">2</span><div class="flag-tooltip"><div class="flag-title">Impersonating internal IT</div>"yourcompany-helpdesk.co" is not your company's domain. Real IT emails always come from your actual company domain — never a separate helpdesk subdomain.</div></span></div>
+            <div class="outlook-reading-time">Today 9:14 AM · To: All Staff</div>
+            <div class="outlook-reading-body">
+              <p>Dear Employee,</p>
+              <p>Our security systems have flagged that your network password is set to expire in <span class="flag">less than 2 hours.<span class="flag-num">3</span><div class="flag-tooltip"><div class="flag-title">Impossible 2-hour window</div>Real IT password systems send warnings days in advance. A 2-hour window is designed to make you act before you verify.</div></span></p>
+              <p>Failure to act will result in <span class="flag">immediate lockout from all company systems, email, VPN, and shared drives.<span class="flag-num">4</span><div class="flag-tooltip"><div class="flag-title">Total access threat</div>Threatening to cut off everything amplifies panic. Real IT lockouts don't happen instantly and are always reversible by contacting IT directly.</div></span></p>
+              <p>Update your credentials now:<br>
+              <span class="flag" style="display:inline-block;padding:2px 4px;margin-top:6px;"><span class="outlook-btn">Update Password Now →</span><span class="flag-num">5</span><div class="flag-tooltip"><div class="flag-title">Credential harvesting link</div>Goes to a fake company login page. Real IT teams direct you to your company's official IT portal — never via an email button.</div></span></p>
+              <p style="font-size:12px;color:#888;margin-top:16px;"><span class="flag">Do not reply to this automated message.<span class="flag-num">6</span><div class="flag-tooltip"><div class="flag-title">Blocking verification</div>"Do not reply" prevents you from emailing back to check. Real IT always wants you to contact them if you're unsure — scammers don't.</div></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flags-legend">
+        <div class="legend-item"><div class="legend-num">1</div><div class="legend-text"><strong>ALL CAPS urgency</strong>Workplace phishing exploits workplace conditioning. URGENT = slow down and verify before clicking anything.</div></div>
+        <div class="legend-item"><div class="legend-num">2</div><div class="legend-text"><strong>Fake company domain</strong>Real IT emails come from your actual company domain — not a separate "helpdesk" subdomain registered by a scammer.</div></div>
+        <div class="legend-item"><div class="legend-num">3</div><div class="legend-text"><strong>2-hour deadline</strong>Real systems warn days in advance. A 2-hour window is designed to stop you thinking and verifying.</div></div>
+        <div class="legend-item"><div class="legend-num">4</div><div class="legend-text"><strong>Total lockout threat</strong>Real IT lockouts are reversible. The extreme consequence is designed to maximize panic.</div></div>
+        <div class="legend-item"><div class="legend-num">5</div><div class="legend-text"><strong>Fake password reset</strong>Real IT uses your company's official portal. A button in an email always goes somewhere the attacker controls.</div></div>
+        <div class="legend-item"><div class="legend-num">6</div><div class="legend-text"><strong>Blocking verification</strong>"Do not reply" cuts off your ability to check. Real IT teams always want you to reach out if something seems off.</div></div>
+      </div>
+    </div>
+
+    <!-- TIKTOK -->
+    <div class="example-pane" id="pane-tiktok">
+      <div style="display:flex;gap:3rem;align-items:flex-start;flex-wrap:wrap;">
+        <div class="tiktok-phone">
+          <div class="tiktok-screen">
+            <div class="tiktok-statusbar">
+              <div class="tiktok-time">9:41</div>
+              <div class="tiktok-icons">●●● WiFi 🔋</div>
+            </div>
+            <div class="tiktok-video-bg">
+              <div class="tiktok-product-img">👜</div>
+              <div class="tiktok-product-name">Designer Dupe Bag — Only Today!</div>
+              <div class="tiktok-price">$12.99</div>
+              <div class="tiktok-original">Was $289.00</div>
+              <div class="tiktok-right">
+                <div class="tiktok-action"><div class="tiktok-action-icon">♥</div><div class="tiktok-action-label">284K</div></div>
+                <div class="tiktok-action"><div class="tiktok-action-icon">💬</div><div class="tiktok-action-label">1.2K</div></div>
+                <div class="tiktok-action"><div class="tiktok-action-icon">↗</div><div class="tiktok-action-label">Share</div></div>
+              </div>
+            </div>
+            <div class="tiktok-bottom">
+              <div class="tiktok-username">
+                <span class="tt-flag flag" style="outline-offset:2px;">@luxurybagdeals_official<span class="flag-num">1</span><div class="flag-tooltip"><div class="flag-title">Unverified seller</div>No blue checkmark. Anyone can write "official" in their username — it means nothing. Only TikTok's verified badge is real.</div></span>
+              </div>
+              <div class="tiktok-caption">
+                OMG you guys 😱 <span class="tt-flag flag" style="outline-offset:2px;">LAST 3 LEFT — selling out NOW!!<span class="flag-num">2</span><div class="flag-tooltip"><div class="flag-title">Fake scarcity</div>"Last 3 left" is a manipulation tactic. It triggers FOMO and stops you from thinking critically about whether this seller is trustworthy.</div></span> Link in bio 🛍
+              </div>
+              <div style="position:relative;margin-top:6px;">
+                <button class="tiktok-shop-btn">🛍 Shop Now — Limited Time</button>
+                <span class="tt-flag flag" style="position:absolute;top:-6px;right:-6px;outline:none;background:transparent;">
+                  <span class="flag-num">3</span>
+                  <div class="flag-tooltip" style="right:0;left:auto;top:calc(100% + 8px);bottom:auto;transform:none;"><div class="flag-title">Redirects off TikTok</div>This often links to an external site outside TikTok's payment protection. Once you leave the app, TikTok can't help if you're scammed.</div>
+                </span>
+              </div>
+            </div>
+            <div class="tiktok-nav">
+              <div class="tiktok-nav-item active"><div class="tiktok-nav-icon">⊞</div>For You</div>
+              <div class="tiktok-nav-item"><div class="tiktok-nav-icon">🔍</div>Search</div>
+              <div class="tiktok-nav-item"><div class="tiktok-nav-icon">＋</div></div>
+              <div class="tiktok-nav-item"><div class="tiktok-nav-icon">💬</div>Inbox</div>
+              <div class="tiktok-nav-item"><div class="tiktok-nav-icon">👤</div>Me</div>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:260px;">
+          <div class="flags-legend">
+            <div class="legend-item"><div class="legend-num">1</div><div class="legend-text"><strong>Unverified seller</strong>No blue checkmark. Writing "official" in your username is meaningless — anyone can do it. Only TikTok's verified badge counts.</div></div>
+            <div class="legend-item"><div class="legend-num">2</div><div class="legend-text"><strong>Fake scarcity</strong>"Last 3 left" is a classic manipulation tactic. It creates FOMO that bypasses your critical thinking before you've verified anything about the seller.</div></div>
+            <div class="legend-item"><div class="legend-num">3</div><div class="legend-text"><strong>External redirect</strong>The shop button often links outside TikTok's buyer protection. Once you're off the platform, TikTok can't help you recover your money.</div></div>
+            <div class="legend-item amber-item"><div class="legend-num" style="background:var(--amber);">+</div><div class="legend-text"><strong>Before you buy anything on TikTok Shop</strong>Search the seller's username + "scam" or "review." Check when the account was created. Look for real reviews with photos, not just heart reactions. If the price seems impossible — it probably is.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="section" id="quiz">
+  <div class="container">
+    <p class="section-eyebrow">Test yourself</p>
+    <h2 class="section-title">Real or phish?</h2>
+    <p class="section-sub">Read each email carefully and decide. The feedback will tell you exactly what to look for.</p>
+    <div style="margin-top:2rem;">
+      <div class="quiz-counter" id="quizCounter">Question 1 of 5</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+      <div class="quiz-card" id="quizCard">
+        <div class="quiz-preview" id="quizPreview"></div>
+        <div class="quiz-question">Is this email legitimate or a phishing attempt?</div>
+        <div class="quiz-options">
+          <button class="quiz-option" id="optReal" onclick="answer('real')">✓ Looks legitimate</button>
+          <button class="quiz-option" id="optPhish" onclick="answer('phish')">⚠ This is phishing</button>
+        </div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+        <div class="quiz-nav"><button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button></div>
+      </div>
+      <div class="quiz-results" id="quizResults">
+        <div class="results-score" id="resultsScore"></div>
+        <div style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-top:0.4rem;">out of 5 correct</div>
+        <div class="results-verdict" id="resultsVerdict"></div>
+        <div class="results-msg" id="resultsMsg"></div>
+        <button class="retry-btn" onclick="restartQuiz()">Try again →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section class="section section-alt" id="tips">
+  <div class="container">
+    <p class="section-eyebrow">Stay safe</p>
+    <h2 class="section-title">Five rules that actually work.</h2>
+    <div class="tips-grid">
+      <div class="tip-card"><div class="tip-num">01</div><div class="tip-title">Check the full sender domain</div><div class="tip-body">Click the display name to reveal the real address. apple.com is real. appl3-verify.net is not. Read every character after the @.</div></div>
+      <div class="tip-card"><div class="tip-num">02</div><div class="tip-title">Never click — type it yourself</div><div class="tip-body">If an email says verify your account, open a new tab and type the real URL directly. Never use an email button or link.</div></div>
+      <div class="tip-card"><div class="tip-num">03</div><div class="tip-title">Urgency is a red flag</div><div class="tip-body">Real companies give you time. Any email demanding you act within hours is trying to stop you from thinking. The pressure is the attack.</div></div>
+      <div class="tip-card"><div class="tip-num">04</div><div class="tip-title">Use a password manager</div><div class="tip-body">Password managers check the actual domain before autofilling. They won't fill your credentials on a fake site — this alone stops most phishing.</div></div>
+      <div class="tip-card"><div class="tip-num">05</div><div class="tip-title">Call to verify</div><div class="tip-body">Unsure about an email from your bank or Apple? Call them using the number on their official website — never the number in the email.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <h2>Share this with someone you care about.</h2>
+  <p>The people most likely to get scammed are the ones least likely to have seen something like this. Send it to a parent, grandparent, or anyone who shops online.</p>
+  <div class="cta-actions">
+    <a href="/" class="btn-primary">← Back to portfolio</a>
+    <a href="/fitcheck" class="btn-outline">Try FitCheck →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Don't Take the Bait</div>
+  <div class="footer-links">
+    <a href="/">Portfolio</a>
+    <a href="/fitcheck">FitCheck</a>
+    <a href="mailto:chloelian8@gmail.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.example-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.example-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pane-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const QUESTIONS=[
+  {from:'FedEx Delivery <tracking@fedex-delivery-update.net>',subject:'Your package could not be delivered — action required',body:'We attempted to deliver your package today but were unable to complete delivery. To reschedule, please confirm your delivery address and pay a $2.99 redelivery fee within 48 hours or your package will be returned to the sender.',answer:'phish',correctFb:'"fedex-delivery-update.net" is not FedEx\'s real domain (fedex.com). FedEx never charges redelivery fees via email. Always verify deliveries by going directly to fedex.com.',wrongFb:'This is phishing. "fedex-delivery-update.net" is a fake domain. FedEx never charges redelivery fees over email — always verify at fedex.com directly.'},
+  {from:'no-reply@github.com',subject:'A new SSH key was added to your account',body:'Hey! A new SSH key was added to your GitHub account from a Mac in San Francisco. If you added this key, you can ignore this email. If you did not add this key, please remove it from your account settings immediately.',answer:'real',correctFb:'This is a real GitHub security notification. The sender is @github.com, no suspicious links, no fake deadline, no credential request. It just informs you and tells you where to go if something\'s wrong.',wrongFb:'This is actually legitimate. Sender is @github.com, no suspicious links or urgency, no requests for credentials. Real security alerts inform without pressure.'},
+  {from:'Venmo <venmo@venmo-payments.info>',subject:'You received $847.00 — claim your payment now',body:'Great news! Someone has sent you $847.00 via Venmo. To claim your payment, verify your bank account details within 24 hours or the funds will be returned to the sender.',answer:'phish',correctFb:'"venmo-payments.info" is not Venmo\'s real domain (venmo.com). Nobody accidentally sends $847. The 24-hour claim window and bank verification request are classic scam patterns.',wrongFb:'This is phishing. "venmo-payments.info" is a fake domain. Unexpected large payments requiring urgent bank verification are a well-known scam formula.'},
+  {from:'Apple <no_reply@email.apple.com>',subject:'Your receipt from the App Store',body:'Thank you for your purchase. Minecraft – Pocket Edition · $6.99 · April 12, 2026. If you did not authorize this purchase, you can request a refund through your purchase history in Settings > [Your Name] > Media & Purchases.',answer:'real',correctFb:'"email.apple.com" is a legitimate Apple subdomain for receipts. No urgency, no suspicious buttons, no credential requests — just a clear receipt with instructions if there\'s an issue.',wrongFb:'This is actually a real Apple receipt. "email.apple.com" is a legitimate subdomain. No pressure, no suspicious links. Real transactional emails give information, not demands.'},
+  {from:'PayPal <service@paypa1-security.com>',subject:'Your account has been limited — verify now',body:'We noticed unusual activity on your PayPal account. To protect you, we\'ve temporarily limited your account. You won\'t be able to send or receive money until you verify your information. Click below to restore full access.',answer:'phish',correctFb:'"paypa1-security.com" uses a 1 instead of the letter l — a lookalike domain. PayPal\'s real domain is paypal.com. Always go to paypal.com directly to check your account status.',wrongFb:'Look at the domain: "paypa1-security.com" — that\'s the number 1, not the letter l. PayPal\'s real domain is paypal.com. Never click email buttons to restore account access.'}
+];
+
+let current=0,score=0,answered=false;
+
+function loadQuestion(idx){
+  answered=false;
+  const q=QUESTIONS[idx];
+  document.getElementById('quizCounter').textContent=`Question ${idx+1} of ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width=`${((idx+1)/QUESTIONS.length)*100}%`;
+  document.getElementById('quizPreview').innerHTML=`<div class="quiz-from">From: ${q.from}</div><div class="quiz-subject">Subject: ${q.subject}</div><div class="quiz-body">${q.body}</div>`;
+  const fb=document.getElementById('quizFeedback');fb.className='quiz-feedback';fb.innerHTML='';
+  ['optReal','optPhish'].forEach(id=>{const el=document.getElementById(id);el.className='quiz-option';el.disabled=false;});
+  document.getElementById('nextBtn').className='next-btn';
+}
+
+function answer(choice){
+  if(answered)return;answered=true;
+  const q=QUESTIONS[current];
+  const correct=choice===q.answer;
+  if(correct)score++;
+  ['optReal','optPhish'].forEach(id=>document.getElementById(id).disabled=true);
+  const chosen=choice==='real'?document.getElementById('optReal'):document.getElementById('optPhish');
+  const correctEl=q.answer==='real'?document.getElementById('optReal'):document.getElementById('optPhish');
+  chosen.classList.add(correct?'correct':'wrong');
+  if(!correct)correctEl.classList.add('correct');
+  const fb=document.getElementById('quizFeedback');
+  fb.className=`quiz-feedback show ${correct?'correct-fb':'wrong-fb'}`;
+  fb.innerHTML=`<strong>${correct?'Correct.':'Not quite.'}</strong> ${correct?q.correctFb:q.wrongFb}`;
+  document.getElementById('nextBtn').className='next-btn show';
+}
+
+function nextQuestion(){
+  current++;
+  if(current>=QUESTIONS.length){
+    document.getElementById('quizCard').style.display='none';
+    document.getElementById('quizCounter').style.display='none';
+    document.getElementById('progressFill').style.width='100%';
+    document.getElementById('quizResults').style.display='block';
+    document.getElementById('resultsScore').textContent=`${score}/5`;
+    const data=score<=1?['Even experts get fooled.','Phishing is built by professionals. Go back through the annotated examples and focus on checking sender domains first.']:score<=3?['Getting sharper.','You caught the obvious ones. Focus on domain names and remember — urgency is always a warning sign.']:score===4?['Sharp eye.','You caught nearly all of them. The most convincing ones fool the most people. Keep the habit.']:['Phishing proof.','You spotted every single one. Now share this with someone who might not — that\'s how we actually fix this.'];
+    document.getElementById('resultsVerdict').textContent=data[0];
+    document.getElementById('resultsMsg').textContent=data[1];
+  }else{loadQuestion(current);}
+}
+
+function restartQuiz(){
+  current=0;score=0;
+  document.getElementById('quizCard').style.display='block';
+  document.getElementById('quizCounter').style.display='block';
+  document.getElementById('quizResults').style.display='none';
+  loadQuestion(0);
+}
+
+loadQuestion(0);
+</script>
+</body>
+</html>
